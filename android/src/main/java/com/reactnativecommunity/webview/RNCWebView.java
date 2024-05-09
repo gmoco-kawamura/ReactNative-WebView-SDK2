@@ -98,37 +98,6 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         mRequestCodeFilePicker = requestCodeFilePicker;
     }
 
-    // super.setWebChromeClient(new WebChromeClient()){
-    //     @SuppressLint("NewApi")
-    //     @SuppressWarnings("all")
-    //     public void onPermissionRequest(PermissionRequest request) {
-    //         if (mListener != null) {
-    //             mListener.onPermissionRequest(request);
-    //         }
-    //         if (Build.VERSION.SDK_INT >= 21) {
-    //             if (mCustomWebChromeClient != null) {
-    //                 mCustomWebChromeClient.onPermissionRequest(request);
-    //             }
-    //             else {
-    //                 super.onPermissionRequest(request);
-    //             }
-    //         }
-    //     }
-
-    //     @SuppressLint("NewApi")
-    //     @SuppressWarnings("all")
-    //     public void onPermissionRequestCanceled(PermissionRequest request) {
-    //         if (Build.VERSION.SDK_INT >= 21) {
-    //             if (mCustomWebChromeClient != null) {
-    //                 mCustomWebChromeClient.onPermissionRequestCanceled(request);
-    //             }
-    //             else {
-    //                 super.onPermissionRequestCanceled(request);
-    //             }
-    //         }
-    //     }
-    // }
-
     protected @Nullable
     String injectedJS;
     protected @Nullable
@@ -202,9 +171,6 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     @Override
     public void onHostDestroy() {
         cleanupCallbacksAndDestroy();
-        // if(mListener != null) {
-        //     mListener.onWebViewClosed();
-        // }
     }
 
     @Override
@@ -470,13 +436,13 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         destroy();
     }
 
-    @Override
-    public void destroy() {
-        if (mWebChromeClient != null) {
-            mWebChromeClient.onHideCustomView();
-        }
-        super.destroy();
-    }
+    // @Override
+    // public void destroy() {
+    //     if (mWebChromeClient != null) {
+    //         mWebChromeClient.onHideCustomView();
+    //     }
+    //     super.destroy();
+    // }
 
   public ThemedReactContext getThemedReactContext() {
     return (ThemedReactContext) this.getContext();
@@ -514,14 +480,6 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
         @JavascriptInterface
         public String injectedObjectJson() { return injectedObjectJson; }
-
-        // @JavascriptInterface
-        // public void webViewClosed(){
-        //     return onHostDestroy();
-        //     // if (mListener != null){
-        //     //     mListener.onWebViewClosed();
-        //     // }
-        // }
     }
 
 
