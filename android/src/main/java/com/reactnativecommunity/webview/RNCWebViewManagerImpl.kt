@@ -82,6 +82,11 @@ class RNCWebViewManagerImpl {
         settings.allowUniversalAccessFromFileURLs = false
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 
+        val webView = RNCWebView(context)
+        val activity = getActivityFromContext(context)
+
+        webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
+
         // Fixes broken full-screen modals/galleries due to body height being 0.
         webView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,

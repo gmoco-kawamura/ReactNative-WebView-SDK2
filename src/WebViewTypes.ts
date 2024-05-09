@@ -1137,6 +1137,8 @@ export interface WebViewSharedProps extends ViewProps {
    */
   source?: WebViewSource;
 
+  onClosePressed?: (e: NativeSyntheticEvent<{ message: string }>) => void;
+
   /**
    * Boolean value to enable JavaScript in the `WebView`. Used on Android only
    * as JavaScript is enabled by default on iOS. The default value is `true`.
