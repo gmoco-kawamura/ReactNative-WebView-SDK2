@@ -15,6 +15,7 @@ import android.webkit.CookieManager
 import android.webkit.DownloadListener
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.PermissionRequest
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.facebook.react.bridge.ReadableArray
@@ -23,6 +24,8 @@ import com.facebook.react.common.MapBuilder
 import com.facebook.react.common.build.ReactBuildConfig
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.WritableMap
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
