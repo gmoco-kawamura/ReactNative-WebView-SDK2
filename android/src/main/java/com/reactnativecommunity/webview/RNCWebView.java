@@ -571,8 +571,8 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         public String injectedObjectJson() { return injectedObjectJson; }
 
         // JavaScriptから呼び出し可能なメソッド
-        context = this.getContext()
-        webView = new RNCWebView(context)
+        context = this.getContext();
+        webView = new RNCWebView(context);
         @JavascriptInterface
         public void webViewClosed() {
             // WritableMap params = Arguments.createMap();
