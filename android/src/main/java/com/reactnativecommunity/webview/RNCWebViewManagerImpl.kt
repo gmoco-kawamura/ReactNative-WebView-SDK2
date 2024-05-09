@@ -234,11 +234,19 @@ class RNCWebViewManagerImpl {
         val params = Arguments.createMap().apply {
             putString("url", eventData)
         }
-        context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
-            webView.id,
-            eventName,
-            params
-        )
+        // context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
+        //     webView.id,
+        //     eventName,
+        //     params
+        // )
+        // UIスレッドでイベントを送信する
+        (context.currentActivity ?: context).runOnUiThread {
+            context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
+                webView.id,
+                eventName,
+                params
+            )
+        }
     }
 
     private fun getActivityFromContext(context: Context): Activity? {
