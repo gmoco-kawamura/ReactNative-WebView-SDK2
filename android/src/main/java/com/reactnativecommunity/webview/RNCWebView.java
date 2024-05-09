@@ -37,6 +37,7 @@ import com.facebook.react.views.scroll.ScrollEvent;
 import com.facebook.react.views.scroll.ScrollEventType;
 import com.reactnativecommunity.webview.events.TopCustomMenuSelectionEvent;
 import com.reactnativecommunity.webview.events.TopMessageEvent;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -577,7 +578,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         public void webViewClosed() {
             // WritableMap params = Arguments.createMap();
             // params.putString("url", eventData);
-            this.getContext().getJSModule(RCTDeviceEventEmitter.class).emit("onClosePressed", null);
+            this.getContext().getJSModule(RCTEventEmitter.class).emit("onClosePressed", null);
             // .receiveEvent(webView.getId(),
             // eventName,
             // params
