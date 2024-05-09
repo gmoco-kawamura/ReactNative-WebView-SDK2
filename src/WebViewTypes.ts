@@ -1,5 +1,5 @@
-import { ReactElement, Component, ComponentProps } from 'react';
-import {
+import { type ReactElement, Component, type ComponentProps } from 'react';
+import type {
   NativeSyntheticEvent,
   ViewProps,
   StyleProp,
@@ -220,6 +220,14 @@ export interface WebViewSourceHtml {
   baseUrl?: string;
 }
 
+export interface WebViewSourceZoneId {
+  zoneId: string;
+}
+
+export interface WebViewSourceUserParameter {
+  userParameter: string;
+}
+
 export interface WebViewCustomMenuItems {
   /**
    * The unique key that will be added as a selector on the webview
@@ -246,7 +254,7 @@ export declare type SuppressMenuItem =
   | 'lookup'
   | 'share';
 
-export type WebViewSource = WebViewSourceUri | WebViewSourceHtml;
+export type WebViewSource = WebViewSourceUri | WebViewSourceHtml | WebViewSourceZoneId | WebViewSourceUserParameter;
 
 export interface ViewManager {
   shouldStartLoadWithLockIdentifier: Function;

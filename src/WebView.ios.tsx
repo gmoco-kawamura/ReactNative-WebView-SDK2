@@ -4,10 +4,10 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { Image, View, ImageSourcePropType, HostComponent } from 'react-native';
+import { Image, View, type ImageSourcePropType, type HostComponent } from 'react-native';
 import invariant from 'invariant';
 
-import RNCWebView, { Commands, NativeProps } from './RNCWebViewNativeComponent';
+import RNCWebView, { Commands, type NativeProps } from './RNCWebViewNativeComponent';
 import RNCWebViewModule from './NativeRNCWebView';
 
 import {
@@ -16,7 +16,7 @@ import {
   defaultRenderLoading,
   useWebViewLogic,
 } from './WebViewShared';
-import {
+import type {
   IOSWebViewProps,
   DecelerationRateConstant,
   WebViewSourceUri,

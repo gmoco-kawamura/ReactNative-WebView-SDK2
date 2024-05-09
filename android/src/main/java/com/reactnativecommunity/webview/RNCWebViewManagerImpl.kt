@@ -376,73 +376,87 @@ class RNCWebViewManagerImpl {
     fun setSource(viewWrapper: RNCWebViewWrapper, source: ReadableMap?, newArch: Boolean = true) {
         val view = viewWrapper.webView
         if (source != null) {
-            if (source.hasKey("html")) {
-                val html = source.getString("html")
-                val baseUrl = if (source.hasKey("baseUrl")) source.getString("baseUrl") else ""
-                view.loadDataWithBaseURL(
-                    baseUrl,
-                    html!!,
-                    HTML_MIME_TYPE,
-                    HTML_ENCODING,
-                    null
-                )
-                return
+            if (source.hasKey("zoneId") && source.hasKey("userParameter")) {
+                val zoneId = source.getString("zoneId") ?: ""
+                val userParameter = source.getString("userParameter") ?: ""
+                val url = "https://wall.smaad.net/wall/$zoneId?u=$userParameter"
+                view.loadUrl(url)
+            } else if (source.hasKey("uri")) {
+                val uri = source.getString("uri")
+                view.loadUrl(uri)
+            } else {
+                view.loadUrl("about:blank")
             }
-            if (source.hasKey("uri")) {
-                val url = source.getString("uri")
-                val previousUrl = view.url
-                if (previousUrl != null && previousUrl == url) {
-                    return
-                }
-                if (source.hasKey("method")) {
-                    val method = source.getString("method")
-                    if (method.equals(HTTP_METHOD_POST, ignoreCase = true)) {
-                        var postData: ByteArray? = null
-                        if (source.hasKey("body")) {
-                            val body = source.getString("body")
-                            postData = try {
-                                body!!.toByteArray(charset("UTF-8"))
-                            } catch (e: UnsupportedEncodingException) {
-                                body!!.toByteArray()
-                            }
-                        }
-                        if (postData == null) {
-                            postData = ByteArray(0)
-                        }
-                        view.postUrl(url!!, postData)
-                        return
-                    }
-                }
-                val headerMap = HashMap<String, String?>()
-                if (source.hasKey("headers")) {
-                    if (newArch) {
-                      val headerArray = source.getArray("headers");
-                      for (header in headerArray!!.toArrayList()) {
-                        val headerCasted = header as HashMap<String, String>
-                        val name = headerCasted.get("name") ?: ""
-                        val value = headerCasted.get("value") ?: ""
-                        if ("user-agent" == name.lowercase(Locale.ENGLISH)) {
-                          view.settings.userAgentString = value
-                        } else {
-                          headerMap[name] = value
-                        }
-                      }
-                    } else {
-                      val headers = source.getMap("headers")
-                      val iter = headers!!.keySetIterator()
-                      while (iter.hasNextKey()) {
-                        val key = iter.nextKey()
-                        if ("user-agent" == key.lowercase(Locale.ENGLISH)) {
-                          view.settings.userAgentString = headers.getString(key)
-                        } else {
-                          headerMap[key] = headers.getString(key)
-                        }
-                      }
-                    }
-                }
-                view.loadUrl(url!!, headerMap)
-                return
-            }
+        } else {
+            view.loadUrl("about:blank")
+        }
+            // if (source.hasKey("html")) {
+            //     val html = source.getString("html")
+            //     val baseUrl = if (source.hasKey("baseUrl")) source.getString("baseUrl") else ""
+            //     view.loadDataWithBaseURL(
+            //         baseUrl,
+            //         html!!,
+            //         HTML_MIME_TYPE,
+            //         HTML_ENCODING,
+            //         null
+            //     )
+            //     return
+            // }
+            // if (source.hasKey("uri")) {
+            //     val url = source.getString("uri")
+            //     val previousUrl = view.url
+            //     if (previousUrl != null && previousUrl == url) {
+            //         return
+            //     }
+            //     if (source.hasKey("method")) {
+            //         val method = source.getString("method")
+            //         if (method.equals(HTTP_METHOD_POST, ignoreCase = true)) {
+            //             var postData: ByteArray? = null
+            //             if (source.hasKey("body")) {
+            //                 val body = source.getString("body")
+            //                 postData = try {
+            //                     body!!.toByteArray(charset("UTF-8"))
+            //                 } catch (e: UnsupportedEncodingException) {
+            //                     body!!.toByteArray()
+            //                 }
+            //             }
+            //             if (postData == null) {
+            //                 postData = ByteArray(0)
+            //             }
+            //             view.postUrl(url!!, postData)
+            //             return
+            //         }
+            //     }
+            //     val headerMap = HashMap<String, String?>()
+            //     if (source.hasKey("headers")) {
+            //         if (newArch) {
+            //           val headerArray = source.getArray("headers");
+            //           for (header in headerArray!!.toArrayList()) {
+            //             val headerCasted = header as HashMap<String, String>
+            //             val name = headerCasted.get("name") ?: ""
+            //             val value = headerCasted.get("value") ?: ""
+            //             if ("user-agent" == name.lowercase(Locale.ENGLISH)) {
+            //               view.settings.userAgentString = value
+            //             } else {
+            //               headerMap[name] = value
+            //             }
+            //           }
+            //         } else {
+            //           val headers = source.getMap("headers")
+            //           val iter = headers!!.keySetIterator()
+            //           while (iter.hasNextKey()) {
+            //             val key = iter.nextKey()
+            //             if ("user-agent" == key.lowercase(Locale.ENGLISH)) {
+            //               view.settings.userAgentString = headers.getString(key)
+            //             } else {
+            //               headerMap[key] = headers.getString(key)
+            //             }
+            //           }
+            //         }
+            //     }
+            //     view.loadUrl(url!!, headerMap)
+            //     return
+            // }
         }
         view.loadUrl(BLANK_URL)
     }

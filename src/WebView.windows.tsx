@@ -16,7 +16,7 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { View, Image, ImageSourcePropType, NativeModules } from 'react-native';
+import { View, Image, type ImageSourcePropType, NativeModules } from 'react-native';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import invariant from 'invariant';
 import { RCTWebView, RCTWebView2 } from './WebViewNativeComponent.windows';
@@ -26,7 +26,7 @@ import {
   defaultRenderError,
   defaultRenderLoading,
 } from './WebViewShared';
-import { NativeWebViewWindows, WindowsWebViewProps } from './WebViewTypes';
+import type { NativeWebViewWindows, WindowsWebViewProps } from './WebViewTypes';
 
 import styles from './WebView.styles';
 
