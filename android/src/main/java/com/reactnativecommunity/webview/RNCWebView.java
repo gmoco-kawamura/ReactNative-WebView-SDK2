@@ -51,6 +51,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     protected int mRequestCodeFilePicker = REQUEST_CODE_FILE_PICKER;
     protected WeakReference<Activity> mActivity;
     protected WeakReference<Fragment> mFragment;
+    protected Listener mListener;
     public interface Listener {
         void onLoadStart(String url);
         void onPermissionRequest(PermissionRequest request);
