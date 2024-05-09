@@ -52,6 +52,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     protected WeakReference<Activity> mActivity;
     protected WeakReference<Fragment> mFragment;
     protected Listener mListener;
+
     public interface Listener {
         void onLoadStart(String url);
         void onPermissionRequest(PermissionRequest request);
@@ -98,7 +99,93 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         mRequestCodeFilePicker = requestCodeFilePicker;
     }
 
+    // test
+    // SmaAdWebView.Listener listener = new SmaAdWebView.Listener() {
+    //   @Override
+    //   public void onLoadStart(String url) {
+    //     sendEvent(context, "onLoadStarted", url);
+    //   }
+
+    //   @Override
+    //   public void onPermissionRequest(PermissionRequest request) {
+    //       // Handle permission request, may need additional implementation
+    //   }
+
+    //   @Override
+    //   public void shouldOverrideUrlLoading(String url) {
+    //     sendEvent(context, "onRedirectReceived", url);
+    //   }
+
+    //   @Override
+    //   public void onLoadStop(String url) {
+    //     sendEvent(context, "onLoadFinished", url);
+    //   }
+
+    //   @Override
+    //   public void onReceivedError(int errorCode, String description, String failingUrl) {
+    //     WritableMap event = Arguments.createMap();
+    //     event.putInt("errorCode", errorCode);
+    //     event.putString("description", description);
+    //     event.putString("failingUrl", failingUrl);
+    //     context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    //       webView.getId(),
+    //       // "onReceivedError",
+    //       "onLoadError",
+    //       event
+    //     );
+    //   }
+
+    //   @Override
+    //   public void onWebViewClosed() {
+    //     sendEvent(context, "onClosePressed", null);
+    //   }
+
+    //   @Override
+    //   public void onUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+    //       WritableMap event = Arguments.createMap();
+    //       event.putString("url", url);
+    //       event.putBoolean("isReload", isReload);
+    //       context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    //           webView.getId(),
+    //           "onUpdateVisitedHistory",
+    //           event
+    //       );
+    //   }
+
+    //   @Override
+    //   public void onConsoleMessage(String message, int lineNumber, String sourceID) {
+    //     WritableMap event = Arguments.createMap();
+    //     event.putString("message", message);
+    //     event.putInt("lineNumber", lineNumber);
+    //     event.putString("sourceID", sourceID);
+    //     context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    //       webView.getId(),
+    //       "onConsoleMessage",
+    //       event
+    //     );
+    //   }
+    // };
+
+    // private void sendEvent(ThemedReactContext context, String eventName, String eventData) {
+    //     WritableMap params = Arguments.createMap();
+    //     params.putString("url", eventData);
+    //     context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    //         webView.getId(),
+    //         eventName,
+    //         params
+    //     );
+    //   }
     
+    //   private Activity getActivityFromContext(Context context) {
+    //     while (context instanceof ContextWrapper) {
+    //         if (context instanceof Activity) {
+    //             return (Activity) context;
+    //         }
+    //         context = ((ContextWrapper) context).getBaseContext();
+    //     }
+    //     return null;
+    //   }
+    // test end
 
     protected @Nullable
     String injectedJS;
@@ -438,13 +525,13 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         destroy();
     }
 
-    // @Override
-    // public void destroy() {
-    //     if (mWebChromeClient != null) {
-    //         mWebChromeClient.onHideCustomView();
-    //     }
-    //     super.destroy();
-    // }
+    @Override
+    public void destroy() {
+        if (mWebChromeClient != null) {
+            mWebChromeClient.onHideCustomView();
+        }
+        super.destroy();
+    }
 
     public ThemedReactContext getThemedReactContext() {
         return (ThemedReactContext) this.getContext();
@@ -482,6 +569,19 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
         @JavascriptInterface
         public String injectedObjectJson() { return injectedObjectJson; }
+
+        // JavaScriptから呼び出し可能なメソッド
+        context = this.getContext()
+        webView = new RNCWebView(context)
+        @JavascriptInterface
+        public void webViewClosed() {
+            // WritableMap params = Arguments.createMap();
+            // params.putString("url", eventData);
+            context.getJSModule(RCTDeviceEventEmitter.class).emit("onClosePressed", null);
+            // .receiveEvent(webView.getId(),
+            // eventName,
+            // params
+        }
     }
 
 

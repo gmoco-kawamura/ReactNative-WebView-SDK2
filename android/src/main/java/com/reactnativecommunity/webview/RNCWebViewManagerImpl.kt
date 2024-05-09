@@ -91,8 +91,8 @@ class RNCWebViewManagerImpl {
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 
         // val webView = RNCWebView(context)
-        val activity = context.currentActivity
-        // val activity = getActivityFromContext(context)
+        // val activity = context.currentActivity
+        val activity = getActivityFromContext(context)
 
         // WebViewの設定
         webView.settings.apply {
