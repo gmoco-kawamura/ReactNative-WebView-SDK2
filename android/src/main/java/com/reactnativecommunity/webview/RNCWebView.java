@@ -1,5 +1,7 @@
 package com.reactnativecommunity.webview;
 
+import android.app.Fragment;
+import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.text.TextUtils;
@@ -41,16 +43,58 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
+import java.lang.ref.WeakReference;
+
 public class RNCWebView extends WebView implements LifecycleEventListener {
+    protected static final int REQUEST_CODE_FILE_PICKER = 51426;
+    protected int mRequestCodeFilePicker = REQUEST_CODE_FILE_PICKER;
+    protected WeakReference<Activity> mActivity;
+    protected WeakReference<Fragment> mFragment;
     public interface Listener {
+        void onLoadStart(String url);
+        void onPermissionRequest(PermissionRequest request);
+        void shouldOverrideUrlLoading(String url);
+        void onLoadStop(String url);
+        void onReceivedError(int errorCode, String description, String failingUrl);
         void onWebViewClosed();
+        void onUpdateVisitedHistory(WebView view, String url, boolean isReload);
+        void onConsoleMessage(String message, int lineNumber, String sourceID);
     }
 
-    private Listener mListener;
+    public void setListener(final Activity activity, final Listener listener) {
+        setListener(activity, listener, REQUEST_CODE_FILE_PICKER);
+    }
 
-    // public void setListener(Listener listener) {
-    //     this.mListener = listener;
-    // }
+    public void setListener(final Activity activity, final Listener listener, final int requestCodeFilePicker) {
+        if (activity != null) {
+            mActivity = new WeakReference<Activity>(activity);
+        }
+        else {
+            mActivity = null;
+        }
+
+        setListener(listener, requestCodeFilePicker);
+    }
+
+    public void setListener(final Fragment fragment, final Listener listener) {
+        setListener(fragment, listener, REQUEST_CODE_FILE_PICKER);
+    }
+
+    public void setListener(final Fragment fragment, final Listener listener, final int requestCodeFilePicker) {
+        if (fragment != null) {
+            mFragment = new WeakReference<Fragment>(fragment);
+        }
+        else {
+            mFragment = null;
+        }
+
+        setListener(listener, requestCodeFilePicker);
+    }
+
+    protected void setListener(final Listener listener, final int requestCodeFilePicker) {
+        mListener = listener;
+        mRequestCodeFilePicker = requestCodeFilePicker;
+    }
 
     protected @Nullable
     String injectedJS;
@@ -438,12 +482,13 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         @JavascriptInterface
         public String injectedObjectJson() { return injectedObjectJson; }
 
-        @JavascriptInterface
-        public void webViewClosed(){
-            if (mListener != null){
-                mListener.onWebViewClosed();
-            }
-        }
+        // @JavascriptInterface
+        // public void webViewClosed(){
+        //     return onHostDestroy();
+        //     // if (mListener != null){
+        //     //     mListener.onWebViewClosed();
+        //     // }
+        // }
     }
 
 

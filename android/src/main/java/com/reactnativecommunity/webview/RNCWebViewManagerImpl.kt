@@ -22,12 +22,14 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.common.build.ReactBuildConfig
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.events.RCTEventEmitter
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
+import java.util.Map
 
 val invalidCharRegex = "[\\\\/%\"]".toRegex()
 
@@ -83,10 +85,78 @@ class RNCWebViewManagerImpl {
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 
         val webView = RNCWebView(context)
-        val activity = context.currentActivity
+        // val activity = context.currentActivity
+        val activity = getActivityFromContext(context)
+        // val webView = SmaAdWebView(context)
 
-        // webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
-        // webView.setLisener
+        // WebViewの設定
+        webView.settings.apply {
+            javaScriptEnabled = true  // JavaScriptを有効化
+        }
+
+        val listener = object : RNCWebView.Listener {
+            override fun onLoadStart(url: String) {
+                sendEvent(context, "onLoadStarted", url)
+            }
+
+            override fun onPermissionRequest(request: PermissionRequest) {
+                // Handle permission request, may need additional implementation
+            }
+
+            override fun shouldOverrideUrlLoading(url: String) {
+                sendEvent(context, "onRedirectReceived", url)
+            }
+
+            override fun onLoadStop(url: String) {
+                sendEvent(context, "onLoadFinished", url)
+            }
+
+            override fun onReceivedError(errorCode: Int, description: String, failingUrl: String) {
+                val event = Arguments.createMap().apply {
+                    putInt("errorCode", errorCode)
+                    putString("description", description)
+                    putString("failingUrl", failingUrl)
+                }
+                context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
+                    webView.id,
+                    "onLoadError",
+                    event
+                )
+            }
+
+            override fun onWebViewClosed() {
+                sendEvent(context, "onClosePressed", null)
+            }
+
+            override fun onUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
+                val event = Arguments.createMap().apply {
+                    putString("url", url)
+                    putBoolean("isReload", isReload)
+                }
+                context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
+                    webView.id,
+                    "onUpdateVisitedHistory",
+                    event
+                )
+            }
+
+            override fun onConsoleMessage(message: String, lineNumber: Int, sourceID: String) {
+                val event = Arguments.createMap().apply {
+                    putString("message", message)
+                    putInt("lineNumber", lineNumber)
+                    putString("sourceID", sourceID)
+                }
+                context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
+                    webView.id,
+                    "onConsoleMessage",
+                    event
+                )
+            }
+        }
+
+        // JavaScriptインターフェースを追加
+        webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
+        webView.setListener(activity, listener)
 
         // Fixes broken full-screen modals/galleries due to body height being 0.
         webView.layoutParams = ViewGroup.LayoutParams(
@@ -143,6 +213,41 @@ class RNCWebViewManagerImpl {
         })
         return RNCWebViewWrapper(context, webView)
     }
+
+    private fun sendEvent(context: ThemedReactContext, eventName: String, eventData: String?) {
+        val params = Arguments.createMap().apply {
+            putString("url", eventData)
+        }
+        context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
+            webView.id,
+            eventName,
+            params
+        )
+    }
+
+    private fun getActivityFromContext(context: Context): Activity? {
+        var context = context
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        return null
+    }
+
+    override fun getExportedCustomDirectEventTypeConstants(): Map<String, Map<String, String>> {
+        return mapOf(
+            "onLoadFinished" to mapOf("registrationName" to "onLoadFinished"),
+            "onLoadStarted" to mapOf("registrationName" to "onLoadStarted"),
+            "onRedirectReceived" to mapOf("registrationName" to "onRedirectReceived"),
+            "onLoadError" to mapOf("registrationName" to "onLoadError"),
+            "onClosePressed" to mapOf("registrationName" to "onClosePressed"),
+            "onUpdateVisitedHistory" to mapOf("registrationName" to "onUpdateVisitedHistory"),
+            "onConsoleMessage" to mapOf("registrationName" to "onConsoleMessage")
+        )
+    }
+
 
     private fun setupWebChromeClient(
         webView: RNCWebView,
