@@ -105,9 +105,9 @@ class RNCWebViewManagerImpl {
                 sendEvent(context, "onLoadStarted", url)
             }
 
-            // override fun onPermissionRequest(request: PermissionRequest) {
-            //     // Handle permission request, may need additional implementation
-            // }
+            override fun onPermissionRequest(request: PermissionRequest) {
+                // Handle permission request, may need additional implementation
+            }
 
             override fun shouldOverrideUrlLoading(url: String) {
                 sendEvent(context, "onRedirectReceived", url)
