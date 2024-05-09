@@ -9,10 +9,10 @@ import android.webkit.JavascriptInterface;
 
 public class JavaScriptBridgeInterface {
     private static final String LOG_TAG = "JSBridgeInterface";
-    private SmaAdWebView.Listener mListener;
+    private RNCWebView.Listener mListener;
     private Context mContext;
 
-    public JavaScriptBridgeInterface(Context context, SmaAdWebView.Listener listener) {
+    public JavaScriptBridgeInterface(Context context, RNCWebView.Listener listener) {
         this.mListener = listener;
         this.mContext = context;
     }
