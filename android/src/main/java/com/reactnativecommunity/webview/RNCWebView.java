@@ -15,6 +15,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.PermissionRequest;
 
 import androidx.annotation.Nullable;
 
@@ -96,36 +97,36 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         mRequestCodeFilePicker = requestCodeFilePicker;
     }
 
-    super.setWebChromeClient(new WebChromeClient()){
-        @SuppressLint("NewApi")
-        @SuppressWarnings("all")
-        public void onPermissionRequest(PermissionRequest request) {
-            if (mListener != null) {
-                mListener.onPermissionRequest(request);
-            }
-            if (Build.VERSION.SDK_INT >= 21) {
-                if (mCustomWebChromeClient != null) {
-                    mCustomWebChromeClient.onPermissionRequest(request);
-                }
-                else {
-                    super.onPermissionRequest(request);
-                }
-            }
-        }
+    // super.setWebChromeClient(new WebChromeClient()){
+    //     @SuppressLint("NewApi")
+    //     @SuppressWarnings("all")
+    //     public void onPermissionRequest(PermissionRequest request) {
+    //         if (mListener != null) {
+    //             mListener.onPermissionRequest(request);
+    //         }
+    //         if (Build.VERSION.SDK_INT >= 21) {
+    //             if (mCustomWebChromeClient != null) {
+    //                 mCustomWebChromeClient.onPermissionRequest(request);
+    //             }
+    //             else {
+    //                 super.onPermissionRequest(request);
+    //             }
+    //         }
+    //     }
 
-        @SuppressLint("NewApi")
-        @SuppressWarnings("all")
-        public void onPermissionRequestCanceled(PermissionRequest request) {
-            if (Build.VERSION.SDK_INT >= 21) {
-                if (mCustomWebChromeClient != null) {
-                    mCustomWebChromeClient.onPermissionRequestCanceled(request);
-                }
-                else {
-                    super.onPermissionRequestCanceled(request);
-                }
-            }
-        }
-    }
+    //     @SuppressLint("NewApi")
+    //     @SuppressWarnings("all")
+    //     public void onPermissionRequestCanceled(PermissionRequest request) {
+    //         if (Build.VERSION.SDK_INT >= 21) {
+    //             if (mCustomWebChromeClient != null) {
+    //                 mCustomWebChromeClient.onPermissionRequestCanceled(request);
+    //             }
+    //             else {
+    //                 super.onPermissionRequestCanceled(request);
+    //             }
+    //         }
+    //     }
+    // }
 
     protected @Nullable
     String injectedJS;
