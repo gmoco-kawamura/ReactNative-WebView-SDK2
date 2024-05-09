@@ -457,8 +457,8 @@ class RNCWebViewManagerImpl {
             //     view.loadUrl(url!!, headerMap)
             //     return
             // }
-        }
-        view.loadUrl(BLANK_URL)
+        // }
+        // view.loadUrl(BLANK_URL)
     }
 
     fun setMessagingModuleName(viewWrapper: RNCWebViewWrapper, value: String?) {
