@@ -1,6 +1,9 @@
 package com.reactnativecommunity.webview
 
 import android.app.DownloadManager
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.Color
