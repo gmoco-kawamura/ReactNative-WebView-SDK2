@@ -98,6 +98,8 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         mRequestCodeFilePicker = requestCodeFilePicker;
     }
 
+    
+
     protected @Nullable
     String injectedJS;
     protected @Nullable
@@ -444,15 +446,15 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     //     super.destroy();
     // }
 
-  public ThemedReactContext getThemedReactContext() {
-    return (ThemedReactContext) this.getContext();
-  }
+    public ThemedReactContext getThemedReactContext() {
+        return (ThemedReactContext) this.getContext();
+    }
 
-  public ReactApplicationContext getReactApplicationContext() {
-      return this.getThemedReactContext().getReactApplicationContext();
-  }
+    public ReactApplicationContext getReactApplicationContext() {
+        return this.getThemedReactContext().getReactApplicationContext();
+    }
 
-  protected class RNCWebViewBridge {
+    protected class RNCWebViewBridge {
         private String TAG = "RNCWebViewBridge";
         RNCWebView mWebView;
         String injectedObjectJson;
