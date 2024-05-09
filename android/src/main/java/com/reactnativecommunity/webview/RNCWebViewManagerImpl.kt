@@ -35,7 +35,7 @@ import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
-import java.util.Map
+// import java.util.Map
 
 val invalidCharRegex = "[\\\\/%\"]".toRegex()
 
@@ -105,9 +105,9 @@ class RNCWebViewManagerImpl {
                 sendEvent(context, "onLoadStarted", url)
             }
 
-            override fun onPermissionRequest(request: PermissionRequest) {
-                // Handle permission request, may need additional implementation
-            }
+            // override fun onPermissionRequest(request: PermissionRequest) {
+            //     // Handle permission request, may need additional implementation
+            // }
 
             override fun shouldOverrideUrlLoading(url: String) {
                 sendEvent(context, "onRedirectReceived", url)
@@ -221,6 +221,7 @@ class RNCWebViewManagerImpl {
     }
 
     private fun sendEvent(context: ThemedReactContext, eventName: String, eventData: String?) {
+        val webView = RNCWebView(context)
         val params = Arguments.createMap().apply {
             putString("url", eventData)
         }
