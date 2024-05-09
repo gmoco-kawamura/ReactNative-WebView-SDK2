@@ -1,6 +1,6 @@
 {
   "name": "kawamura-rn-webview",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "sdk",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
