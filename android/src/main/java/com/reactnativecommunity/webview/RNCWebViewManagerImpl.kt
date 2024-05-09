@@ -83,7 +83,7 @@ class RNCWebViewManagerImpl {
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 
         val webView = RNCWebView(context)
-        val activity = getActivityFromContext(context)
+        val activity = context.currentActivity
 
         webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
 

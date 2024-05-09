@@ -42,6 +42,16 @@ import java.util.List;
 import java.util.Map;
 
 public class RNCWebView extends WebView implements LifecycleEventListener {
+    public interface Listener {
+        void onWebViewClosed();
+    }
+
+    private Listener mListener;
+
+    public void setListener(Listener listener) {
+        this.mListener = listener;
+    }
+
     protected @Nullable
     String injectedJS;
     protected @Nullable
@@ -115,6 +125,9 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     @Override
     public void onHostDestroy() {
         cleanupCallbacksAndDestroy();
+        if(mListener != null) {
+            mListener.onWebViewClosed();
+        }
     }
 
     @Override
