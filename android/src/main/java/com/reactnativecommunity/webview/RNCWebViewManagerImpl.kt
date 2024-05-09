@@ -381,9 +381,9 @@ class RNCWebViewManagerImpl {
                 val userParameter = source.getString("userParameter") ?: ""
                 val url = "https://wall.smaad.net/wall/$zoneId?u=$userParameter"
                 view.loadUrl(url)
-            } else if (source.hasKey("uri")) {
-                val uri = source.getString("uri")
-                view.loadUrl(uri)
+            // } else if (source.hasKey("uri")) {
+            //     val url = source.getString("uri")
+            //     view.loadUrl(url)
             } else {
                 view.loadUrl("about:blank")
             }
