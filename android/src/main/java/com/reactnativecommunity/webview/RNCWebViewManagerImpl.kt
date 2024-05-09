@@ -230,10 +230,10 @@ class RNCWebViewManagerImpl {
     }
 
     private fun sendEvent(context: ThemedReactContext, eventName: String, eventData: String?) {
-        // val webView = RNCWebView(context)
-        // val params = Arguments.createMap().apply {
-        //     putString("url", eventData)
-        // }
+        val webView = RNCWebView(context)
+        val params = Arguments.createMap().apply {
+            putString("url", eventData)
+        }
         // context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
         //     webView.id,
         //     eventName,
