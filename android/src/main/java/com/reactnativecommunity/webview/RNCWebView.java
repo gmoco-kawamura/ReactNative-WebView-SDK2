@@ -48,9 +48,9 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
     private Listener mListener;
 
-    public void setListener(Listener listener) {
-        this.mListener = listener;
-    }
+    // public void setListener(Listener listener) {
+    //     this.mListener = listener;
+    // }
 
     protected @Nullable
     String injectedJS;
@@ -125,9 +125,9 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     @Override
     public void onHostDestroy() {
         cleanupCallbacksAndDestroy();
-        if(mListener != null) {
-            mListener.onWebViewClosed();
-        }
+        // if(mListener != null) {
+        //     mListener.onWebViewClosed();
+        // }
     }
 
     @Override
@@ -437,6 +437,13 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
         @JavascriptInterface
         public String injectedObjectJson() { return injectedObjectJson; }
+
+        @JavascriptInterface
+        public void webViewClosed(){
+            if (mListener != null){
+                mListener.onWebViewClosed();
+            }
+        }
     }
 
 

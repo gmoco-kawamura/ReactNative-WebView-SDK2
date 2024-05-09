@@ -85,7 +85,8 @@ class RNCWebViewManagerImpl {
         val webView = RNCWebView(context)
         val activity = context.currentActivity
 
-        webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
+        // webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
+        // webView.setLisener
 
         // Fixes broken full-screen modals/galleries due to body height being 0.
         webView.layoutParams = ViewGroup.LayoutParams(
