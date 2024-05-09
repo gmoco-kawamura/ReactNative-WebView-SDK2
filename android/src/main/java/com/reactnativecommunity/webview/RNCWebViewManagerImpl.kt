@@ -90,7 +90,7 @@ class RNCWebViewManagerImpl {
         settings.allowUniversalAccessFromFileURLs = false
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 
-        val webView = RNCWebView(context)
+        // val webView = RNCWebView(context)
         // val activity = context.currentActivity
         val activity = getActivityFromContext(context)
         // val webView = SmaAdWebView(context)
@@ -106,16 +106,16 @@ class RNCWebViewManagerImpl {
             }
 
             override fun onPermissionRequest(request: PermissionRequest) {
-                // 受け取ったPermissionRequestオブジェクトからリソースの種類を取得
-                val resources = request.resources
+                // // 受け取ったPermissionRequestオブジェクトからリソースの種類を取得
+                // val resources = request.resources
 
-                // デバッグ用にリクエストされたリソースをログに出力
-                resources.forEach {
-                    Log.d("WebViewPermission", "Permission request for resource: $it")
-                }
+                // // デバッグ用にリクエストされたリソースをログに出力
+                // resources.forEach {
+                //     Log.d("WebViewPermission", "Permission request for resource: $it")
+                // }
 
-                // すべての許可リクエストを承認
-                request.grant(resources)
+                // // すべての許可リクエストを承認
+                // request.grant(resources)
             }
 
             override fun shouldOverrideUrlLoading(url: String) {
