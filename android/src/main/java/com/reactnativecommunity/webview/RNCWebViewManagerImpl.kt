@@ -106,7 +106,16 @@ class RNCWebViewManagerImpl {
             }
 
             override fun onPermissionRequest(request: PermissionRequest) {
-                // Handle permission request, may need additional implementation
+                // 受け取ったPermissionRequestオブジェクトからリソースの種類を取得
+                val resources = request.resources
+
+                // デバッグ用にリクエストされたリソースをログに出力
+                resources.forEach {
+                    Log.d("WebViewPermission", "Permission request for resource: $it")
+                }
+
+                // すべての許可リクエストを承認
+                request.grant(resources)
             }
 
             override fun shouldOverrideUrlLoading(url: String) {
