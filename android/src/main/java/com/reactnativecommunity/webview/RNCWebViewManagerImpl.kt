@@ -243,17 +243,17 @@ class RNCWebViewManagerImpl {
         return null
     }
 
-    override fun getExportedCustomDirectEventTypeConstants(): Map<String, Map<String, String>> {
-        return mapOf(
-            "onLoadFinished" to mapOf("registrationName" to "onLoadFinished"),
-            "onLoadStarted" to mapOf("registrationName" to "onLoadStarted"),
-            "onRedirectReceived" to mapOf("registrationName" to "onRedirectReceived"),
-            "onLoadError" to mapOf("registrationName" to "onLoadError"),
-            "onClosePressed" to mapOf("registrationName" to "onClosePressed"),
-            "onUpdateVisitedHistory" to mapOf("registrationName" to "onUpdateVisitedHistory"),
-            "onConsoleMessage" to mapOf("registrationName" to "onConsoleMessage")
-        )
-    }
+    // override fun getExportedCustomDirectEventTypeConstants(): Map<String, Map<String, String>> {
+    //     return mapOf(
+    //         "onLoadFinished" to mapOf("registrationName" to "onLoadFinished"),
+    //         "onLoadStarted" to mapOf("registrationName" to "onLoadStarted"),
+    //         "onRedirectReceived" to mapOf("registrationName" to "onRedirectReceived"),
+    //         "onLoadError" to mapOf("registrationName" to "onLoadError"),
+    //         "onClosePressed" to mapOf("registrationName" to "onClosePressed"),
+    //         "onUpdateVisitedHistory" to mapOf("registrationName" to "onUpdateVisitedHistory"),
+    //         "onConsoleMessage" to mapOf("registrationName" to "onConsoleMessage")
+    //     )
+    // }
 
 
     private fun setupWebChromeClient(
