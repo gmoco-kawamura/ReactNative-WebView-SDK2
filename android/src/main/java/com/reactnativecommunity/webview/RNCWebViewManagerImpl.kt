@@ -140,6 +140,7 @@ class RNCWebViewManagerImpl {
 
             override fun onWebViewClosed() {
                 // sendEvent(context, "onClosePressed", null)
+                Log.d(TAG, "onWebViewClosed is called")
                 context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
                     webView.id,
                     "onClosePressed",
