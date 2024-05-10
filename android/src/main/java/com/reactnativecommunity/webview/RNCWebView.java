@@ -16,7 +16,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.PermissionRequest;
-
+import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.facebook.common.logging.FLog;
@@ -37,6 +37,7 @@ import com.facebook.react.views.scroll.ScrollEvent;
 import com.facebook.react.views.scroll.ScrollEventType;
 import com.reactnativecommunity.webview.events.TopCustomMenuSelectionEvent;
 import com.reactnativecommunity.webview.events.TopMessageEvent;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import org.json.JSONException;
@@ -45,9 +46,12 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
+
 import java.lang.ref.WeakReference;
 
 public class RNCWebView extends WebView implements LifecycleEventListener {
+    private static final String LOG_TAG = "addJavascript";
+
     protected static final int REQUEST_CODE_FILE_PICKER = 51426;
     protected int mRequestCodeFilePicker = REQUEST_CODE_FILE_PICKER;
     protected WeakReference<Activity> mActivity;
@@ -56,12 +60,19 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
     public interface Listener {
         void onLoadStart(String url);
+
         void onPermissionRequest(PermissionRequest request);
+
         void shouldOverrideUrlLoading(String url);
+
         void onLoadStop(String url);
+
         void onReceivedError(int errorCode, String description, String failingUrl);
+
         void onWebViewClosed();
+
         void onUpdateVisitedHistory(WebView view, String url, boolean isReload);
+
         void onConsoleMessage(String message, int lineNumber, String sourceID);
     }
 
@@ -72,8 +83,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     public void setListener(final Activity activity, final Listener listener, final int requestCodeFilePicker) {
         if (activity != null) {
             mActivity = new WeakReference<Activity>(activity);
-        }
-        else {
+        } else {
             mActivity = null;
         }
 
@@ -87,8 +97,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     public void setListener(final Fragment fragment, final Listener listener, final int requestCodeFilePicker) {
         if (fragment != null) {
             mFragment = new WeakReference<Fragment>(fragment);
-        }
-        else {
+        } else {
             mFragment = null;
         }
 
@@ -102,114 +111,114 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
     // test
     // SmaAdWebView.Listener listener = new SmaAdWebView.Listener() {
-    //   @Override
-    //   public void onLoadStart(String url) {
-    //     sendEvent(context, "onLoadStarted", url);
-    //   }
+    // @Override
+    // public void onLoadStart(String url) {
+    // sendEvent(context, "onLoadStarted", url);
+    // }
 
-    //   @Override
-    //   public void onPermissionRequest(PermissionRequest request) {
-    //       // Handle permission request, may need additional implementation
-    //   }
+    // @Override
+    // public void onPermissionRequest(PermissionRequest request) {
+    // // Handle permission request, may need additional implementation
+    // }
 
-    //   @Override
-    //   public void shouldOverrideUrlLoading(String url) {
-    //     sendEvent(context, "onRedirectReceived", url);
-    //   }
+    // @Override
+    // public void shouldOverrideUrlLoading(String url) {
+    // sendEvent(context, "onRedirectReceived", url);
+    // }
 
-    //   @Override
-    //   public void onLoadStop(String url) {
-    //     sendEvent(context, "onLoadFinished", url);
-    //   }
+    // @Override
+    // public void onLoadStop(String url) {
+    // sendEvent(context, "onLoadFinished", url);
+    // }
 
-    //   @Override
-    //   public void onReceivedError(int errorCode, String description, String failingUrl) {
-    //     WritableMap event = Arguments.createMap();
-    //     event.putInt("errorCode", errorCode);
-    //     event.putString("description", description);
-    //     event.putString("failingUrl", failingUrl);
-    //     context.getJSModule(RCTEventEmitter.class).receiveEvent(
-    //       webView.getId(),
-    //       // "onReceivedError",
-    //       "onLoadError",
-    //       event
-    //     );
-    //   }
+    // @Override
+    // public void onReceivedError(int errorCode, String description, String
+    // failingUrl) {
+    // WritableMap event = Arguments.createMap();
+    // event.putInt("errorCode", errorCode);
+    // event.putString("description", description);
+    // event.putString("failingUrl", failingUrl);
+    // context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    // webView.getId(),
+    // // "onReceivedError",
+    // "onLoadError",
+    // event
+    // );
+    // }
 
-    //   @Override
-    //   public void onWebViewClosed() {
-    //     sendEvent(context, "onClosePressed", null);
-    //   }
+    // @Override
+    // public void onWebViewClosed() {
+    // sendEvent(context, "onClosePressed", null);
+    // }
 
-    //   @Override
-    //   public void onUpdateVisitedHistory(WebView view, String url, boolean isReload) {
-    //       WritableMap event = Arguments.createMap();
-    //       event.putString("url", url);
-    //       event.putBoolean("isReload", isReload);
-    //       context.getJSModule(RCTEventEmitter.class).receiveEvent(
-    //           webView.getId(),
-    //           "onUpdateVisitedHistory",
-    //           event
-    //       );
-    //   }
+    // @Override
+    // public void onUpdateVisitedHistory(WebView view, String url, boolean
+    // isReload) {
+    // WritableMap event = Arguments.createMap();
+    // event.putString("url", url);
+    // event.putBoolean("isReload", isReload);
+    // context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    // webView.getId(),
+    // "onUpdateVisitedHistory",
+    // event
+    // );
+    // }
 
-    //   @Override
-    //   public void onConsoleMessage(String message, int lineNumber, String sourceID) {
-    //     WritableMap event = Arguments.createMap();
-    //     event.putString("message", message);
-    //     event.putInt("lineNumber", lineNumber);
-    //     event.putString("sourceID", sourceID);
-    //     context.getJSModule(RCTEventEmitter.class).receiveEvent(
-    //       webView.getId(),
-    //       "onConsoleMessage",
-    //       event
-    //     );
-    //   }
+    // @Override
+    // public void onConsoleMessage(String message, int lineNumber, String sourceID)
+    // {
+    // WritableMap event = Arguments.createMap();
+    // event.putString("message", message);
+    // event.putInt("lineNumber", lineNumber);
+    // event.putString("sourceID", sourceID);
+    // context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    // webView.getId(),
+    // "onConsoleMessage",
+    // event
+    // );
+    // }
     // };
 
-    // private void sendEvent(ThemedReactContext context, String eventName, String eventData) {
-    //     WritableMap params = Arguments.createMap();
-    //     params.putString("url", eventData);
-    //     context.getJSModule(RCTEventEmitter.class).receiveEvent(
-    //         webView.getId(),
-    //         eventName,
-    //         params
-    //     );
-    //   }
-    
-    //   private Activity getActivityFromContext(Context context) {
-    //     while (context instanceof ContextWrapper) {
-    //         if (context instanceof Activity) {
-    //             return (Activity) context;
-    //         }
-    //         context = ((ContextWrapper) context).getBaseContext();
-    //     }
-    //     return null;
-    //   }
+    // private void sendEvent(ThemedReactContext context, String eventName, String
+    // eventData) {
+    // WritableMap params = Arguments.createMap();
+    // params.putString("url", eventData);
+    // context.getJSModule(RCTEventEmitter.class).receiveEvent(
+    // webView.getId(),
+    // eventName,
+    // params
+    // );
+    // }
+
+    // private Activity getActivityFromContext(Context context) {
+    // while (context instanceof ContextWrapper) {
+    // if (context instanceof Activity) {
+    // return (Activity) context;
+    // }
+    // context = ((ContextWrapper) context).getBaseContext();
+    // }
+    // return null;
+    // }
     // test end
 
-    protected @Nullable
-    String injectedJS;
-    protected @Nullable
-    String injectedJSBeforeContentLoaded;
+    protected @Nullable String injectedJS;
+    protected @Nullable String injectedJSBeforeContentLoaded;
     protected static final String JAVASCRIPT_INTERFACE = "ReactNativeWebView";
-    protected @Nullable
-    RNCWebViewBridge bridge;
+    protected @Nullable RNCWebViewBridge bridge;
 
     /**
-     * android.webkit.WebChromeClient fundamentally does not support JS injection into frames other
-     * than the main frame, so these two properties are mostly here just for parity with iOS & macOS.
+     * android.webkit.WebChromeClient fundamentally does not support JS injection
+     * into frames other
+     * than the main frame, so these two properties are mostly here just for parity
+     * with iOS & macOS.
      */
     protected boolean injectedJavaScriptForMainFrameOnly = true;
     protected boolean injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
 
     protected boolean messagingEnabled = false;
-    protected @Nullable
-    String messagingModuleName;
-    protected @Nullable
-    RNCWebViewMessagingModule mMessagingJSModule;
-    protected @Nullable
-    RNCWebViewClient mRNCWebViewClient;
+    protected @Nullable String messagingModuleName;
+    protected @Nullable RNCWebViewMessagingModule mMessagingJSModule;
+    protected @Nullable RNCWebViewClient mRNCWebViewClient;
     protected boolean sendContentSizeChangeEvents = false;
     private OnScrollDispatchHelper mOnScrollDispatchHelper;
     protected boolean hasScrollEvent = false;
@@ -220,11 +229,13 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
      * WebView must be created with an context of the current activity
      * <p>
      * Activity Context is required for creation of dialogs internally by WebView
-     * Reactive Native needed for access to ReactNative internal system functionality
+     * Reactive Native needed for access to ReactNative internal system
+     * functionality
      */
     public RNCWebView(ThemedReactContext reactContext) {
         super(reactContext);
-        mMessagingJSModule = ((ThemedReactContext) this.getContext()).getReactApplicationContext().getJSModule(RNCWebViewMessagingModule.class);
+        mMessagingJSModule = ((ThemedReactContext) this.getContext()).getReactApplicationContext()
+                .getJSModule(RNCWebViewMessagingModule.class);
         progressChangedFilter = new ProgressChangedFilter();
     }
 
@@ -281,79 +292,77 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
                     new ContentSizeChangeEvent(
                             RNCWebViewWrapper.getReactTagFromWebView(this),
                             w,
-                            h
-                    )
-            );
+                            h));
         }
     }
 
-    protected @Nullable
-    List<Map<String, String>> menuCustomItems;
+    protected @Nullable List<Map<String, String>> menuCustomItems;
 
     public void setMenuCustomItems(List<Map<String, String>> menuCustomItems) {
-      this.menuCustomItems = menuCustomItems;
+        this.menuCustomItems = menuCustomItems;
     }
 
     @Override
     public ActionMode startActionMode(ActionMode.Callback callback, int type) {
-      if(menuCustomItems == null ){
-        return super.startActionMode(callback, type);
-      }
-
-      return super.startActionMode(new ActionMode.Callback2() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-          for (int i = 0; i < menuCustomItems.size(); i++) {
-            menu.add(Menu.NONE, i, i, (menuCustomItems.get(i)).get("label"));
-          }
-          return true;
+        if (menuCustomItems == null) {
+            return super.startActionMode(callback, type);
         }
 
-        @Override
-        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-          return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-          WritableMap wMap = Arguments.createMap();
-          RNCWebView.this.evaluateJavascript(
-            "(function(){return {selection: window.getSelection().toString()} })()",
-            new ValueCallback<String>() {
-              @Override
-              public void onReceiveValue(String selectionJson) {
-                Map<String, String> menuItemMap = menuCustomItems.get(item.getItemId());
-                wMap.putString("label", menuItemMap.get("label"));
-                wMap.putString("key", menuItemMap.get("key"));
-                String selectionText = "";
-                try {
-                  selectionText = new JSONObject(selectionJson).getString("selection");
-                } catch (JSONException ignored) {}
-                wMap.putString("selectedText", selectionText);
-                dispatchEvent(RNCWebView.this, new TopCustomMenuSelectionEvent(RNCWebViewWrapper.getReactTagFromWebView(RNCWebView.this), wMap));
-                mode.finish();
-              }
+        return super.startActionMode(new ActionMode.Callback2() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                for (int i = 0; i < menuCustomItems.size(); i++) {
+                    menu.add(Menu.NONE, i, i, (menuCustomItems.get(i)).get("label"));
+                }
+                return true;
             }
-          );
-          return true;
-        }
 
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-          mode = null;
-        }
-
-        @Override
-        public void onGetContentRect (ActionMode mode,
-                View view,
-                Rect outRect){
-            if (callback instanceof ActionMode.Callback2) {
-                ((ActionMode.Callback2) callback).onGetContentRect(mode, view, outRect);
-            } else {
-                super.onGetContentRect(mode, view, outRect);
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
             }
-          }
-      }, type);
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                WritableMap wMap = Arguments.createMap();
+                RNCWebView.this.evaluateJavascript(
+                        "(function(){return {selection: window.getSelection().toString()} })()",
+                        new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String selectionJson) {
+                                Map<String, String> menuItemMap = menuCustomItems.get(item.getItemId());
+                                wMap.putString("label", menuItemMap.get("label"));
+                                wMap.putString("key", menuItemMap.get("key"));
+                                String selectionText = "";
+                                try {
+                                    selectionText = new JSONObject(selectionJson).getString("selection");
+                                } catch (JSONException ignored) {
+                                }
+                                wMap.putString("selectedText", selectionText);
+                                dispatchEvent(RNCWebView.this, new TopCustomMenuSelectionEvent(
+                                        RNCWebViewWrapper.getReactTagFromWebView(RNCWebView.this), wMap));
+                                mode.finish();
+                            }
+                        });
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                mode = null;
+            }
+
+            @Override
+            public void onGetContentRect(ActionMode mode,
+                    View view,
+                    Rect outRect) {
+                if (callback instanceof ActionMode.Callback2) {
+                    ((ActionMode.Callback2) callback).onGetContentRect(mode, view, outRect);
+                } else {
+                    super.onGetContentRect(mode, view, outRect);
+                }
+            }
+        }, type);
     }
 
     @Override
@@ -366,6 +375,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
     }
 
     WebChromeClient mWebChromeClient;
+
     @Override
     public void setWebChromeClient(WebChromeClient client) {
         this.mWebChromeClient = client;
@@ -379,8 +389,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         return this.mWebChromeClient;
     }
 
-    public @Nullable
-    RNCWebViewClient getRNCWebViewClient() {
+    public @Nullable RNCWebViewClient getRNCWebViewClient() {
         return mRNCWebViewClient;
     }
 
@@ -405,6 +414,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         messagingEnabled = enabled;
 
         if (enabled) {
+            Log.d(LOG_TAG, "setMessagingEnabled")
             createRNCWebViewBridge(this);
         }
     }
@@ -431,6 +441,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
     public void setInjectedJavaScriptObject(String obj) {
         if (getSettings().getJavaScriptEnabled()) {
+            Log.d(LOG_TAG, "setInjectedJavaScriptObject")
             RNCWebViewBridge b = createRNCWebViewBridge(this);
             b.setInjectedObjectJson(obj);
         }
@@ -454,7 +465,8 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
                     if (mMessagingJSModule != null) {
                         dispatchDirectMessage(data);
                     } else {
-                        dispatchEvent(webView, new TopMessageEvent(RNCWebViewWrapper.getReactTagFromWebView(webView), data));
+                        dispatchEvent(webView,
+                                new TopMessageEvent(RNCWebViewWrapper.getReactTagFromWebView(webView), data));
                     }
                 }
             });
@@ -548,7 +560,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         String injectedObjectJson;
 
         RNCWebViewBridge(RNCWebView c) {
-          mWebView = c;
+            mWebView = c;
         }
 
         public void setInjectedObjectJson(String s) {
@@ -564,27 +576,32 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
             if (mWebView.getMessagingEnabled()) {
                 mWebView.onMessage(message);
             } else {
-                FLog.w(TAG, "ReactNativeWebView.postMessage method was called but messaging is disabled. Pass an onMessage handler to the WebView.");
+                FLog.w(TAG,
+                        "ReactNativeWebView.postMessage method was called but messaging is disabled. Pass an onMessage handler to the WebView.");
             }
         }
 
         @JavascriptInterface
-        public String injectedObjectJson() { return injectedObjectJson; }
+        public String injectedObjectJson() {
+            return injectedObjectJson;
+        }
 
         // JavaScriptから呼び出し可能なメソッド
         // context = this.getContext();
         // webView = new RNCWebView(context);
+        ThemedReactContext reactContext = getThemedReactContext();
+
         @JavascriptInterface
-        public void webViewClosed() {
-            // WritableMap params = Arguments.createMap();
-            // params.putString("url", eventData);
-            this.getContext().getJSModule(RCTEventEmitter.class).emit("onClosePressed", null);
-            // .receiveEvent(webView.getId(),
-            // eventName,
-            // params
+        public void webViewClosed(String url) {
+            WritableMap params = Arguments.createMap();
+            params.putString("url", url);
+            // reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("onClosePressed",params);
+            reactContext.getJSModule(RCTEventEmitter.class)
+                    .receiveEvent(mWebView.getId(),
+                            "onClosePressed",
+                            params);
         }
     }
-
 
     protected static class ProgressChangedFilter {
         private boolean waitingForCommandLoadUrl = false;
