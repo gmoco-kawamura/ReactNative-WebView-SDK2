@@ -399,6 +399,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
     protected RNCWebViewBridge createRNCWebViewBridge(RNCWebView webView) {
         if (bridge == null) {
+            Log.d(LOG_TAG, "addJavascriptInterface in createRNCWebViewBridge");
             bridge = new RNCWebViewBridge(webView);
             addJavascriptInterface(bridge, JAVASCRIPT_INTERFACE);
         }
