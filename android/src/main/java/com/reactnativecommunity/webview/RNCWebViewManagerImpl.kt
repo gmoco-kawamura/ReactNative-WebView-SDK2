@@ -174,8 +174,8 @@ class RNCWebViewManagerImpl {
         }
 
         // JavaScriptインターフェースを追加
-        // webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
-        // webView.setListener(activity, listener)
+        webView.addJavascriptInterface(JavaScriptBridgeInterface(activity, listener), "Android")
+        webView.setListener(activity, listener)
 
         // Fixes broken full-screen modals/galleries due to body height being 0.
         webView.layoutParams = ViewGroup.LayoutParams(

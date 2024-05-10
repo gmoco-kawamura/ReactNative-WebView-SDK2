@@ -588,20 +588,18 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         }
 
         // JavaScriptから呼び出し可能なメソッド
-        // context = this.getContext();
-        // webView = new RNCWebView(context);
-        ThemedReactContext reactContext = getThemedReactContext();
+        // ThemedReactContext reactContext = getThemedReactContext();
 
-        @JavascriptInterface
-        public void webViewClosed(String url) {
-            WritableMap params = Arguments.createMap();
-            params.putString("url", url);
-            // reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("onClosePressed",params);
-            reactContext.getJSModule(RCTEventEmitter.class)
-                    .receiveEvent(mWebView.getId(),
-                            "onClosePressed",
-                            params);
-        }
+        // @JavascriptInterface
+        // public void webViewClosed(String url) {
+        //     WritableMap params = Arguments.createMap();
+        //     params.putString("url", url);
+        //     // reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("onClosePressed",params);
+        //     reactContext.getJSModule(RCTEventEmitter.class)
+        //             .receiveEvent(mWebView.getId(),
+        //                     "onClosePressed",
+        //                     params);
+        // }
     }
 
     protected static class ProgressChangedFilter {
