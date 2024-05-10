@@ -414,7 +414,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
         messagingEnabled = enabled;
 
         if (enabled) {
-            Log.d(LOG_TAG, "setMessagingEnabled")
+            Log.d(LOG_TAG, "setMessagingEnabled");
             createRNCWebViewBridge(this);
         }
     }
@@ -441,7 +441,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
 
     public void setInjectedJavaScriptObject(String obj) {
         if (getSettings().getJavaScriptEnabled()) {
-            Log.d(LOG_TAG, "setInjectedJavaScriptObject")
+            Log.d(LOG_TAG, "setInjectedJavaScriptObject");
             RNCWebViewBridge b = createRNCWebViewBridge(this);
             b.setInjectedObjectJson(obj);
         }
