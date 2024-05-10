@@ -101,7 +101,7 @@ class RNCWebViewManagerImpl {
 
         val listener = object : RNCWebView.Listener {
             override fun onLoadStart(url: String) {
-                sendEvent(context, "onLoadStarted", url)
+                // sendEvent(context, "onLoadStarted", url)
             }
 
             override fun onPermissionRequest(request: PermissionRequest) {
@@ -118,11 +118,11 @@ class RNCWebViewManagerImpl {
             }
 
             override fun shouldOverrideUrlLoading(url: String) {
-                sendEvent(context, "onRedirectReceived", url)
+                // sendEvent(context, "onRedirectReceived", url)
             }
 
             override fun onLoadStop(url: String) {
-                sendEvent(context, "onLoadFinished", url)
+                // sendEvent(context, "onLoadFinished", url)
             }
 
             override fun onReceivedError(errorCode: Int, description: String, failingUrl: String) {
@@ -139,7 +139,12 @@ class RNCWebViewManagerImpl {
             }
 
             override fun onWebViewClosed() {
-                sendEvent(context, "onClosePressed", null)
+                // sendEvent(context, "onClosePressed", null)
+                context.getJSModule(RCTEventEmitter::class.java).receiveEvent(
+                    webView.id,
+                    "onClosePressed",
+                    null
+                )
             }
 
             override fun onUpdateVisitedHistory(view: WebView, url: String, isReload: Boolean) {
