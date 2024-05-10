@@ -14,6 +14,7 @@ import type {
   WebViewProgressEvent,
   WebViewRenderProcessGoneEvent,
   WebViewTerminatedEvent,
+  // WebViewClosePressedEvent,
 } from './WebViewTypes';
 import styles from './WebView.styles';
 
@@ -114,6 +115,7 @@ export const useWebViewLogic = ({
   onShouldStartLoadWithRequestCallback,
 }: {
   startInLoadingState?: boolean;
+  // onClosePressed?: (event: WebViewClosePressedEvent) => void;
   onNavigationStateChange?: (event: WebViewNavigation) => void;
   onLoadStart?: (event: WebViewNavigationEvent) => void;
   onLoad?: (event: WebViewNavigationEvent) => void;

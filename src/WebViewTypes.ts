@@ -161,6 +161,8 @@ export type WebViewOpenWindowEvent = NativeSyntheticEvent<WebViewOpenWindow>;
 
 export type WebViewScrollEvent = NativeSyntheticEvent<NativeScrollEvent>;
 
+export type WebViewClosePressedEvent = NativeSyntheticEvent<{message: string}>;
+
 export type DataDetectorTypes =
   | 'phoneNumber'
   | 'link'
@@ -304,6 +306,7 @@ export interface CommonNativeWebViewProps extends ViewProps {
   mediaPlaybackRequiresUserAction?: boolean;
   webviewDebuggingEnabled?: boolean;
   messagingEnabled: boolean;
+  onClosePressed?: (event: WebViewClosePressedEvent) => void;
   onScroll?: (event: WebViewScrollEvent) => void;
   onLoadingError: (event: WebViewErrorEvent) => void;
   onLoadingFinish: (event: WebViewNavigationEvent) => void;
@@ -1137,7 +1140,7 @@ export interface WebViewSharedProps extends ViewProps {
    */
   source?: WebViewSource;
 
-  onClosePressed?: (e: NativeSyntheticEvent<{ message: string }>) => void;
+  onClosePressed?: (event: WebViewClosePressedEvent) => void;
 
   /**
    * Boolean value to enable JavaScript in the `WebView`. Used on Android only
