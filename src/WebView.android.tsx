@@ -78,6 +78,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(
       setDisplayZoomControls = false,
       nestedScrollEnabled = false,
       startInLoadingState,
+      onClosePressed,
       onNavigationStateChange,
       onLoadStart,
       onError,
