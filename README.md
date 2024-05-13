@@ -1,6 +1,11 @@
 # kawamura-rn-webview
 
-sdk
+SDK
+
+## 開発メモ
+
+JavaScriptからリスナー登録した関数の呼び出しはできているが、実装側が受け取れていない。
+プロパティの設定が不十分である為、srcのtsxにプロパティの追加が必要。
 
 ## Installation
 
@@ -11,11 +16,11 @@ npm install kawamura-rn-webview
 ## Usage
 
 ```js
-import { SmaAdWebView } from "kawamura-rn-webview";
+import { SmaAdWebView } from 'kawamura-rn-webview';
 
 // ...
 
-<SmaAdWebView color="tomato" />
+<SmaAdWebView color="tomato" />;
 ```
 
 ## Contributing
